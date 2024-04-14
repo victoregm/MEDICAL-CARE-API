@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Formulario del Paciente</title>
+  <link href="static/css/main.css" rel="stylesheet">
+  <script>
+    const paciente_id = "{{paciente_id}}"
+  </script>
+  <script type="text/javascript" src="static/js/home.js" defer></script>
+</head>
+<body>
+
+
+  <div class="form-container">
+    <h1 class="form-header">Formulario del Paciente</h1>  
+
+
+    <form id="pacienteForm">
+      <h2 class="form-header">Informacion Personal</h2> 
+
+      <div id="personalContainer" class="form-box">
+        <!-- TODO: ONLY NUMERIC -->
+        <div class="form-item">
+          <label for="cedulaPaciente">Cedula:</label>
+          <input type="text" id="cedulaPaciente" class="" required>
+        </div>
+      
+        <div class="form-item">
+          <label for="nombrePaciente">Nombre:</label>
+          <input type="text" id="nombrePaciente" required>
+        </div>
+      
+        <div class="form-item">
+          <label for="generoPaciente">Género:</label>
+          <select id="generoPaciente" required>
+            <option value="masculino">Masculino</option>
+            <option value="femenino">Femenino</option>
+          </select>
+        </div>
+        
+        <div class="form-item">
+          <label for="fecha_de_nacimiento">Fecha de Nacimiento:</label>
+          <input type="date" id="fecha_de_nacimiento" required>
+        </div>
+        
+        <div class="form-item">
+          <label for="numero_telefono">Número de Teléfono:</label>
+          <input type="text" id="numero_telefono" required>
+        </div>
+
+        <div class="form-item">  
+          <label for="email">Correo Electrónico:</label>
+          <input type="email" id="email" required>
+        </div>
+      
+        <div class="form-item">  
+          <label for="problemas_actuales">Problemas Actuales:</label>
+          <textarea id="problemas_actuales">Ninguno</textarea>
+        </div>
+      
+        <div class="form-item">
+          <label for="observaciones">Observaciones:</label>
+          <textarea id="observaciones">Ninguno</textarea>
+        </div>
+      </div>
+      
+      <div id="enfermedadesContainer">
+        <h2 class="form-header">Enfermedades:</h2>
+        <ul id="addedEnfermedadesList">
+        </ul>
+        <div class="form-box" id="newEnfermedadForm" >
+          <label for="nombreEnfermedad">Nombre:</label>
+          <input type="text" id="nombreEnfermedad">
+            
+          <label for="fechaDiagnostico">Fecha de Diagnóstico:</label>
+          <input type="date" id="fechaDiagnostico">
+          <button type="button" class="button" onclick="addEnfermedad()">Agregar Enfermedad</button>
+        </div>
+      </div>
+
+
+      <div id="medicamentosContainer">
+        <h2 class="form-header">Medicamentos:</h2>
+        <ul id="addedMedicamentosList">
+        </ul>
+        <div class="new-medicamento form-box" id="newMedicamentoForm" >
+          <label for="nombreMedicamento">Nombre:</label>
+          <input type="text" id="nombreMedicamento">
+          
+          <label for="dosisMedicamento">Dosis:</label>
+          <input type="number" id="dosisMedicamento">
+
+          <label for="unidadDosisMedicamento">Unidad Dosis:</label>
+
+          <select id="unidadDosisMedicamento" required>
+            <option value="mg">MG</option>
+          </select>
+            
+          <label for="fechaInicioMedicamento">Desde :</label>
+          <input type="date" id="fechaInicioMedicamento">
+          <button type="button" class="button" onclick="addMedicamento()">Agregar Medicamento</button>
+        </div>
+      </div>
+
+
+      <div id="cirugiasContainer">
+        <h2 class="form-header">Cirugías:</h2>
+        <ul id="addedCirugiasList">
+        </ul>
+        <div class="form-box" id="newCirugiaForm" >
+          <label for="nombreCirugia">Nombre:</label>
+          <input type="text" id="nombreCirugia">
+
+          <label for="descripcionCirugia">Descripción:</label>
+          <textarea id="descripcionCirugia"></textarea>
+          
+          <label for="fechaCirugia">Desde :</label>
+          <input type="date" id="fechaCirugia">
+
+
+
+          <button type="button" class="button" onclick="addCirugia()">Agregar Cirugía</button>
+        </div>
+      </div>
+
+      <div id="antecedentesContainer">
+        <h2 class="form-header">Antecedentes Familiares:</h2>
+        <ul id="addedAntecedentesList">
+        </ul>
+        <div class="form-box" id="newAntecedenteForm" >
+          <label for="antecedenteFamiliar">Antecedente Familiar:</label>
+          <input type="text" id="antecedenteFamiliar">
+
+          <button type="button" class="button" onclick="addAntecedente()">Agregar Antecedente</button>
+        </div>
+      </div>
+
+      <input id='submitBotton' type="submit" class="button" value="Update"/>
+    </form>
+  </div>
+
+</body>
+</html>

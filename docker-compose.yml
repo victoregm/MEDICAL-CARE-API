@@ -1,0 +1,47 @@
+version: "3.8"
+
+services:
+  db:
+    image: mongodb/mongodb-community-server:7.0-ubi8
+    environment:
+      MONGODB_INITDB_ROOT_USERNAME: ${MONGO_USERNAME}
+      MONGODB_INITDB_ROOT_PASSWORD: ${MONGO_PASSWORD}
+    ports:
+      - "${MONGO_PORT}:${MONGO_PORT}"
+    healthcheck:
+      test: echo 'db.runCommand("ping").ok' | mongosh localhost:${MONGO_PORT}/test --quiet
+      interval: 20s
+      retries: 3
+    volumes:
+      - mongodb:/data/db
+
+  api:
+    build:
+      context: .
+      dockerfile: ./compose/Dockerfile
+    command: /start
+    environment:
+      PROJECT_NAME: MEDICAL_CARE_API
+      API_PORT: ${API_PORT}
+      MONGO_HOST: db
+      MONGO_PORT: ${MONGO_PORT}
+      MONGO_USERNAME: ${MONGO_USERNAME}
+      MONGO_PASSWORD: ${MONGO_PASSWORD}
+      MONGO_DATABASE_NAME: ${MONGO_DATABASE_NAME}
+      MONGO_COLLECTION_NAME: ${MONGO_COLLECTION_NAME}
+
+    ports:
+      - "${API_PORT}:${API_PORT}"
+
+  frontend:
+    build:
+      context: .
+      dockerfile: ./compose/frontend/Dockerfile
+    command: /start
+    environment:
+      API_PORT: ${FRONTEND_PORT}
+    ports:
+      - "${FRONTEND_PORT}:${FRONTEND_PORT}"
+
+volumes:
+  mongodb:

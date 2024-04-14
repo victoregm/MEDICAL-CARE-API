@@ -1,0 +1,8 @@
+#!/bin/bash
+
+set -o errexit
+set -o pipefail
+set -o nounset
+
+PORT=${API_PORT:-8000}
+uvicorn main:app --proxy-headers --host 0.0.0.0 --port $PORT
