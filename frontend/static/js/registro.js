@@ -1,7 +1,35 @@
 const pacienteForm = document.getElementById('pacienteForm');
 const enfermedadForm = document.getElementById("nombreEnfermedad");
 const addedEnfermedadesList = document.getElementById('addedEnfermedadesList');
+const addedAlergiasList = document.getElementById('addedAlergiasList');
 const DOMAIN = "http://localhost:8000/pacientes";
+
+// ALERGIAS
+var alergias = [];
+
+function ParseAlergias() {
+  const nombreAlergia = document.getElementById('nombreAlergias').value;
+  const fechaDiagnostico = document.getElementById('fechaDiagnostico').value;
+  const alergia = {
+    'nombre': nombreAlergia,
+    'fecha_diagnostico': fechaDiagnostico,
+  }
+  return alergia
+}
+
+function addAlergiasItemToHtml(alergia) {
+  const list_item = document.createElement('ul');
+  list_item.textContent = `${alergia.nombre}, fecha: ${alergia.fecha_diagnostico}`;
+  addedAlergiasList.appendChild(list_item);
+}
+
+function addAlergias() {
+  const alergia = ParseAlergias()
+  addAlergiasItemToHtml(alergia);
+  alergias.push(alergia);
+}
+
+
 // ENFERMEDAD
 var enfermedades = [];
 
@@ -25,10 +53,8 @@ function addEnfermedadItemToHtml(enfermedad) {
 
 function addEnfermedad() {
   const enfermedad = ParseEnfermedad()
-  console.log(enfermedad)
   addEnfermedadItemToHtml(enfermedad);
   enfermedades.push(enfermedad);
-
 }
 
 
@@ -62,7 +88,6 @@ function addMedicamentoItemToHtml(medicamento) {
 
 function addMedicamento() {
   const medicamento = ParseMedicamento()
-  console.log(medicamento)
   addMedicamentoItemToHtml(medicamento);
   medicamentos.push(medicamento);
 
@@ -98,7 +123,6 @@ function addCirugiaItemToHtml(cirugia) {
 
 function addCirugia() {
   const cirugia = ParseCirugia()
-  console.log(cirugia)
   addCirugiaItemToHtml(cirugia);
   cirugias.push(cirugia);
 }
@@ -117,7 +141,6 @@ function addAntecedenteItemToHtml(antecedente) {
 
 function addAntecedente() {
   const antecedente = document.getElementById('antecedenteFamiliar').value
-  console.log(antecedente)
   addAntecedenteItemToHtml(antecedente);
   antecedentes_familiares.push(antecedente);
 }
@@ -136,8 +159,6 @@ async function CreatePacienceObject() {
   const problemas_actuales = document.getElementById('problemas_actuales').value;
   const observaciones = document.getElementById('observaciones').value;
 
-  console.log(observaciones);
-
 
   const antecedentes = {
     'problemas_actuales': problemas_actuales,
@@ -145,7 +166,8 @@ async function CreatePacienceObject() {
     'enfermedades': enfermedades,
     'medicamentos': medicamentos,
     'cirugias': cirugias,
-    'antecedentes_familiares': antecedentes_familiares
+    'antecedentes_familiares': antecedentes_familiares,
+    'alergias': alergias,
   }
 
   const paciente = {
@@ -158,8 +180,6 @@ async function CreatePacienceObject() {
     'email': email,
     'antecedentes': antecedentes,
   }
-  console.log(paciente)
-
 
   // send to the API
   const url = `${DOMAIN}/create` 
@@ -176,6 +196,7 @@ async function CreatePacienceObject() {
       cirugias = [];
       antecedentes_familiares = [];
       enfermedades = [];
+      alergias = [];
       addedMedicamentosList.innerHTML = "";
       addedCirugiasList.innerHTML = "";
       addedAntecedentesList.innerHTML = "";

@@ -10,6 +10,13 @@ class UseCase(Protocol):
         raise NotImplementedError
     
 @dataclass
+class ListPacientes(UseCase):
+    repo: PacienteRepository
+
+    def run(self, page: int = 1, per_page: int = 10) -> list[Paciente]:
+        return self.repo.list_json(page=page, per_page=per_page)
+    
+@dataclass
 class CreatePaciente(UseCase):
     repo: PacienteRepository
 

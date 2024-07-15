@@ -16,7 +16,7 @@ body {
 
 /* Global */
 
-.form-container{
+.form-container {
   font-family: 'Roboto', sans-serif;
   border-radius: 0.5em;
   padding: 0.5em 1.25em;
@@ -26,18 +26,18 @@ body {
 
 }
 
-.form-box{
+.form-box {
   display: flex;
   flex-direction: column;
 }
 
-.form-item{
+.form-item {
   display: flex;
   flex-direction: column;
 }
 
 #pacienteForm input,
-#pacienteForm select, 
+#pacienteForm select,
 #pacienteForm textarea {
   padding: 10px;
   border: 1px solid #ccc;
@@ -63,6 +63,24 @@ label {
   font-weight: bold;
   color: #0066CC;
   margin-bottom: 5px;
+}
+
+table,
+th,
+td {
+  border: 1px solid #0066CC;
+  border-collapse: collapse;
+}
+
+td {
+  padding: 0.5rem 0.5rem;
+  text-align: center;
+}
+
+table>thead>tr>th {
+  color: #0066CC;
+  font-weight: bold;
+  padding: 0.5rem 0.5rem;
 }
 
 .required::after {
@@ -122,4 +140,18 @@ ul.floating-list li {
   padding: 5px 10px;
   border-radius: 5px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.button.menu {
+  padding: 2rem;
+  color: white;
+  
+  background-color: rgb(101 156 253);
+  width: 90%;
+  text-align: center;
+  border-radius: 1rem;
+}
+
+.button.menu:hover {
+  background-color: rgb(41, 82, 152);
 }

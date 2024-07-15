@@ -1,11 +1,12 @@
 const pacienteForm = document.getElementById('pacienteForm');
 const enfermedadForm = document.getElementById("nombreEnfermedad");
 const addedEnfermedadesList = document.getElementById('addedEnfermedadesList');
+const addedAlergiasList = document.getElementById('addedAlergiasList');
 const submitBotton = document.getElementById('submitBotton');
 const DOMAIN = "http://localhost:8000/pacientes";
 
-function GetNewPaciente(){
-  const paciente = { 
+function GetNewPaciente() {
+  const paciente = {
     id: "",
     nombre: "",
     fecha_de_registro: "",
@@ -19,43 +20,39 @@ function GetNewPaciente(){
       enfermedades: [],
       medicamentos: [],
       cirugias: [],
-      antecedentes_familiares: []
-      }
-
+      antecedentes_familiares: [],
+      alergias: [],
+    }
   }
   return paciente
-} 
+}
 
-async function FetchPaciente(paciente_id){
-  console.log('fetching from API')
-  const url = `${DOMAIN}/${paciente_id}` 
+async function FetchPaciente(paciente_id) {
+  const url = `${DOMAIN}/${paciente_id}`
   const response = await fetch(url, {
-      method: 'GET',
-      headers: {
-          'Content-Type': 'application/json'
-      },
-    });
-    if (response.ok){
-      paciente = await response.json()
-      console.log(paciente);
-      UpdatePacienteInformationHTML(paciente);
-    }
-    else {
-      const error_response = await response.json()
-      throw new Error(`couldnt create paciente. S${error_response}`)
-    }
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+  });
+  if (response.ok) {
+    paciente = await response.json()
+    UpdatePacienteInformationHTML(paciente);
   }
+  else {
+    const error_response = await response.json()
+    throw new Error(`couldnt create paciente. S${error_response}`)
+  }
+}
 
-async function GetPaciente(paciente_id){
+async function GetPaciente(paciente_id) {
 
   if (paciente_id === "None") {
-    console.log('paciente_id is null');
     submitBotton.value = 'Crear';
     pacienteForm.addEventListener('submit', CreatePacienteInAPI);
     return GetNewPaciente()
 
   } else {
-    console.log('paciente_id is not null');
     submitBotton.value = 'Actualizar';
     pacienteForm.addEventListener('submit', UpdatePacienteInAPI);
     return FetchPaciente(paciente_id)
@@ -63,8 +60,49 @@ async function GetPaciente(paciente_id){
 }
 
 var paciente = GetNewPaciente();
-console.log(paciente_id);
 GetPaciente(paciente_id);
+
+// ALERGIAS
+var alergias = [];
+
+function ParseAlergias() {
+  const nombreAlergia = document.getElementById('nombreAlergias').value;
+  const fechaDiagnostico = document.getElementById('fechaDiagnostico').value;
+  const alergia = {
+    'nombre': nombreAlergia,
+    'fecha_diagnostico': fechaDiagnostico,
+  }
+  return alergia
+}
+
+function addAlergiasItemToHtml(alergia) {
+  const list_item = document.createElement('ul');
+  list_item.textContent = `${alergia.nombre}, fecha: ${alergia.fecha_diagnostico}`;
+  addedAlergiasList.appendChild(list_item);
+}
+
+function addAlergias() {
+  const alergia = ParseAlergias()
+  addAlergiasItemToHtml(alergia);
+  alergias.push(alergia);
+}
+
+function DisplayAlergias() {
+  addedAlergiasList.innerHTML = ""
+  paciente.antecedentes.alergias.forEach(item => { addAlergiasItemToHtml(item) })
+}
+
+function removeAlergiasItemFromHtml(event) {
+  const item = event.target;
+  const itemsArray = Array.from(addedAlergiasList.children);
+  const itemIndex = itemsArray.indexOf(item);
+  paciente.antecedentes.alergias.splice(itemIndex, 1);
+  DisplayAlergias();
+}
+
+addedAlergiasList.addEventListener('click', removeAlergiasItemFromHtml)
+
+
 
 // ENFERMEDADES
 
@@ -84,24 +122,22 @@ function addEnfermedadItemToHtml(enfermedad) {
   addedEnfermedadesList.appendChild(list_item);
 }
 
-function DisplayEnfermedades(){
+function DisplayEnfermedades() {
   addedEnfermedadesList.innerHTML = ""
-  paciente.antecedentes.enfermedades.forEach(item => {addEnfermedadItemToHtml(item)})
+  paciente.antecedentes.enfermedades.forEach(item => { addEnfermedadItemToHtml(item) })
 }
 
 
-function removeEnfermedadItemFromHtml(event){
+function removeEnfermedadItemFromHtml(event) {
   const item = event.target;
   const itemsArray = Array.from(addedEnfermedadesList.children);
   const itemIndex = itemsArray.indexOf(item);
-  console.log(itemIndex);
   paciente.antecedentes.enfermedades.splice(itemIndex, 1);
   DisplayEnfermedades();
 }
 
 function addEnfermedad() {
   const enfermedad = ParseEnfermedad();
-  console.log(enfermedad);
   paciente.antecedentes.enfermedades.push(enfermedad);
   DisplayEnfermedades();
 }
@@ -137,24 +173,22 @@ function addMedicamentoItemToHtml(medicamento) {
 
 }
 
-function displayMedicamentos(){
+function displayMedicamentos() {
   addedMedicamentosList.innerHTML = ""
-  paciente.antecedentes.medicamentos.forEach(item => {addMedicamentoItemToHtml(item)})
+  paciente.antecedentes.medicamentos.forEach(item => { addMedicamentoItemToHtml(item) })
 }
 
 
-function removeMedicamentoItemFromHtml(event){
+function removeMedicamentoItemFromHtml(event) {
   const item = event.target;
   const itemsArray = Array.from(addedMedicamentosList.children);
   const itemIndex = itemsArray.indexOf(item);
-  console.log(itemIndex);
   paciente.antecedentes.medicamentos.splice(itemIndex, 1);
   displayMedicamentos();
 }
 
 function addMedicamento() {
   const medicamento = ParseMedicamento()
-  console.log(medicamento)
   paciente.antecedentes.medicamentos.push(medicamento);
   displayMedicamentos();
 
@@ -190,24 +224,22 @@ function addCirugiaItemToHtml(cirugia) {
 }
 
 
-function displayCirugias(){
+function displayCirugias() {
   addedCirugiasList.innerHTML = ""
-  paciente.antecedentes.cirugias.forEach(item => {addCirugiaItemToHtml(item)})
+  paciente.antecedentes.cirugias.forEach(item => { addCirugiaItemToHtml(item) })
 }
 
 
-function removeCirugiaItemFromHtml(event){
+function removeCirugiaItemFromHtml(event) {
   const item = event.target;
   const itemsArray = Array.from(addedCirugiasList.children);
   const itemIndex = itemsArray.indexOf(item);
-  console.log(itemIndex);
   paciente.antecedentes.cirugias.splice(itemIndex, 1);
   displayCirugias();
 }
 
 function addCirugia() {
   const cirugia = ParseCirugia()
-  console.log(cirugia)
   addCirugiaItemToHtml(cirugia);
   paciente.antecedentes.cirugias.push(cirugia);
 }
@@ -227,24 +259,22 @@ function addAntecedenteItemToHtml(antecedente) {
 
 }
 
-function displayAntecedente(){
+function displayAntecedente() {
   addedAntecedentesList.innerHTML = ""
-  paciente.antecedentes.antecedentes_familiares.forEach(item => {addAntecedenteItemToHtml(item)})
+  paciente.antecedentes.antecedentes_familiares.forEach(item => { addAntecedenteItemToHtml(item) })
 }
 
 function addAntecedente() {
   const antecedente = document.getElementById('antecedenteFamiliar').value
-  console.log(antecedente)
   paciente.antecedentes.antecedentes_familiares.push(antecedente);
   displayAntecedente()
 }
 
 
-function removeAntecedenteItemFromHtml(event){
+function removeAntecedenteItemFromHtml(event) {
   const item = event.target;
   const itemsArray = Array.from(addedAntecedentesList.children);
   const itemIndex = itemsArray.indexOf(item);
-  console.log(itemIndex);
   paciente.antecedentes.antecedentes_familiares.splice(itemIndex, 1);
   displayAntecedente();
 }
@@ -254,7 +284,7 @@ addedAntecedentesList.addEventListener('click', removeAntecedenteItemFromHtml)
 
 
 
-function UpdatePacienteInformationHTML(paciente){
+function UpdatePacienteInformationHTML(paciente) {
   document.getElementById('nombrePaciente').value = paciente.nombre;
   document.getElementById('cedulaPaciente').value = paciente.id;
   document.getElementById('generoPaciente').value = paciente.genero;
@@ -267,11 +297,12 @@ function UpdatePacienteInformationHTML(paciente){
   displayMedicamentos();
   displayCirugias();
   displayAntecedente();
+  DisplayAlergias();
 }
 
 // UpdatePacienteInformationHTML(paciente)
 
-function UpdatePacienceObjectFromHTML(paciente){
+function UpdatePacienceObjectFromHTML(paciente) {
   paciente.fecha_de_registro = new Date().toJSON().slice(0, 10);
   paciente.nombre = document.getElementById('nombrePaciente').value;
   paciente.id = document.getElementById('cedulaPaciente').value;
@@ -286,7 +317,7 @@ function UpdatePacienceObjectFromHTML(paciente){
 
 
 
-function GetPacienteURL(paciente_id){
+function GetPacienteURL(paciente_id) {
   // Get the current endpoint URL
   var currentURL = window.location.href;
 
@@ -302,53 +333,44 @@ function GetPacienteURL(paciente_id){
 async function CreatePacienteInAPI() {
   event.preventDefault();
   paciente = UpdatePacienceObjectFromHTML(paciente)
-  console.log("crear paciente");
-  console.log(paciente);
   // send to the API
-  const url = `${DOMAIN}/create` 
+  const url = `${DOMAIN}/create`
   const response = await fetch(url, {
-      method: 'POST',
-      headers: {
-          'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(paciente),
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(paciente),
   });
-  if (response.ok){
-    console.log('sucessfull!')
-    console.log('sucessfull!')
+  if (response.ok) {
     next_url = GetPacienteURL(paciente.id);
-    console.log(next_url);
     window.location.assign(next_url);
   }
   else {
-      const error_response = await response.json()
-      throw new Error(`couldnt create paciente. S${error_response}`)
+    const error_response = await response.json()
+    throw new Error(`couldnt create paciente. S${error_response}`)
   }
 }
 
 async function UpdatePacienteInAPI() {
   event.preventDefault();
   paciente = UpdatePacienceObjectFromHTML(paciente)
-  console.log("actualizar paciente");
-  console.log(paciente);
 
-  const url = `${DOMAIN}/${paciente.id}` 
+  const url = `${DOMAIN}/${paciente.id}`
   const response = await fetch(url, {
-      method: 'POST',
-      headers: {
-          'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(paciente),
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(paciente),
   });
-  if (response.ok){
-    console.log('sucessfull!')
+  if (response.ok) {
     next_url = GetPacienteURL(paciente.id);
-    console.log(next_url);
     window.location.assign(next_url);
   }
   else {
-      const error_response = await response.json()
-      throw new Error(`couldnt create paciente. S${error_response}`)
+    const error_response = await response.json()
+    throw new Error(`couldnt create paciente. S${error_response}`)
   }
 }
 

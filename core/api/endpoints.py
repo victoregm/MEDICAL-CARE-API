@@ -2,12 +2,13 @@ from usecases import (
     CreatePaciente,
     DeletePaciente,
     FindPaciente,
+    ListPacientes,
     UpdatePaciente
 )
 from container import Container, Collection
 from api.route import api_router
 from domain.aggregate import Paciente
-from fastapi import Depends, status, HTTPException
+from fastapi import Depends, status, HTTPException, Query
 from pydantic import BaseModel
 
 class DeleteResponse(BaseModel):
@@ -15,8 +16,13 @@ class DeleteResponse(BaseModel):
     successful: bool
 
 @api_router.get('/')
-def main():
-    return 'hello word!'
+def main(
+    page: int = Query(1, ge=1),
+    per_page: int = Query(10, ge=1),
+    repo: Collection = Depends(Container.get_repo)
+):
+    uc = ListPacientes(repo=repo)
+    return uc.run(page=page, per_page=per_page)
 
 def check_paciente_id(
     id: str,

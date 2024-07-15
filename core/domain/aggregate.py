@@ -9,6 +9,10 @@ class Enfermedades(BaseModel):
     nombre: str
     fecha_diagnostico: Optional[date] = None
 
+class Alergias(BaseModel):
+    nombre: str
+    fecha_diagnostico: Optional[date] = None
+
 class Medicamentos(BaseModel):
     nombre: str
     dosis: str
@@ -27,6 +31,7 @@ class Antecedentes(BaseModel):
     medicamentos: Optional[List[Medicamentos]]
     cirugias: Optional[List[Cirujias]] = None
     antecedentes_familiares: Optional[List[str]] = None
+    alergias: Optional[List[Alergias]] = None
 
 
 class Paciente(BaseModel):

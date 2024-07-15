@@ -3,9 +3,11 @@
 
 <head>
   <title>Formulario del Paciente</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link href="/static/css/main.css" rel="stylesheet">
-  <script type="text/javascript" src="/static/js/registro.js" defer></script>
+  <script>
+    const paciente_id = "{{paciente_id}}"
+  </script>
+  <script type="text/javascript" src="/static/js/paciente_id.js" defer></script>
 </head>
 
 <body>
@@ -80,8 +82,8 @@
 
       <div id="enfermedadesContainer">
         <h2 class="form-header">Enfermedades:</h2>
-        <div id="addedEnfermedadesList">
-        </div>
+        <ul id="addedEnfermedadesList">
+        </ul>
         <div class="form-box" id="newEnfermedadForm">
           <label for="nombreEnfermedad">Nombre:</label>
           <input type="text" id="nombreEnfermedad">
@@ -109,8 +111,8 @@
 
       <div id="medicamentosContainer">
         <h2 class="form-header">Medicamentos:</h2>
-        <div id="addedMedicamentosList">
-        </div>
+        <ul id="addedMedicamentosList">
+        </ul>
         <div class="new-medicamento form-box" id="newMedicamentoForm">
           <label for="nombreMedicamento">Nombre:</label>
           <input type="text" id="nombreMedicamento">
@@ -133,8 +135,8 @@
 
       <div id="cirugiasContainer">
         <h2 class="form-header">Cirugías:</h2>
-        <div id="addedCirugiasList">
-        </div>
+        <ul id="addedCirugiasList">
+        </ul>
         <div class="form-box" id="newCirugiaForm">
           <label for="nombreCirugia">Nombre:</label>
           <input type="text" id="nombreCirugia">
@@ -153,8 +155,8 @@
 
       <div id="antecedentesContainer">
         <h2 class="form-header">Antecedentes Familiares:</h2>
-        <div id="addedAntecedentesList">
-        </div>
+        <ul id="addedAntecedentesList">
+        </ul>
         <div class="form-box" id="newAntecedenteForm">
           <label for="antecedenteFamiliar">Antecedente Familiar:</label>
           <input type="text" id="antecedenteFamiliar">
@@ -163,7 +165,7 @@
         </div>
       </div>
 
-      <input type="submit" class="button" value="Registrar" />
+      <input id='submitBotton' type="submit" class="button" value="Update" />
     </form>
   </div>
 
